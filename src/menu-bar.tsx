@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { getPreferenceValues, Icon, MenuBarExtra } from "@raycast/api";
 import WS from "isomorphic-ws"; // polyfill for isomorphic ws
 globalThis.WebSocket = globalThis.WebSocket || WS; // set global WebSocket to the polyfill
@@ -15,7 +17,7 @@ export default function Command() {
   const api = useRef<MusicAssistantApi | null>(null);
 
   function log(...args: any[]) {
-    if (true) {
+    if (debug) {
       console.log("[Menu Bar]", ...args);
     }
   }

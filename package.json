@@ -9,13 +9,13 @@
   "commands": [
     {
       "name": "menu-bar",
-      "title": "menu bar",
+      "title": "Music Assistant Menu Bar",
       "description": "Toggle the visibility of the menu bar",
       "mode": "menu-bar"
     },
     {
       "name": "next-song",
-      "title": "next song",
+      "title": "Music Assistant Next Song",
       "description": "Play the next song",
       "mode": "no-view"
     }
@@ -41,6 +41,7 @@
     },
     {
       "name": "debug",
+      "label": "debug",
       "type": "checkbox",
       "required": false,
       "title": "Show debug logging",

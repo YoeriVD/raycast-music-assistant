@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-empty-object-type */
 
 /// constants
 export const SECURE_STRING_SUBSTITUTE = "this_value_is_encrypted";
@@ -435,25 +437,11 @@ export interface ServerInfoMessage {
   onboard_done: boolean;
 }
 
-export type MessageType =
-  | CommandMessage
-  | EventMessage
-  | SuccessResultMessage
-  | ErrorResultMessage
-  | ServerInfoMessage;
+export type MessageType = CommandMessage | EventMessage | SuccessResultMessage | ErrorResultMessage | ServerInfoMessage;
 
 // config entries
 
-export type ConfigValueType =
-  | number
-  | string
-  | boolean
-  | number[]
-  | string[]
-  | boolean[]
-  | number[]
-  | string[]
-  | null;
+export type ConfigValueType = number | string | boolean | number[] | string[] | boolean[] | number[] | string[] | null;
 
 export interface ConfigValueOption {
   // Model for a value with separated name/value.
