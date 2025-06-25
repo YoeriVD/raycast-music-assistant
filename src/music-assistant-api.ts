@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { WebsocketBuilder, Websocket, LinearBackoff } from "websocket-ts";
-import { createConnection, ERR_HASS_HOST_REQUIRED, getAuth } from "home-assistant-js-websocket";
 
 import {
   type Artist,

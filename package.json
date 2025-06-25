@@ -3,20 +3,28 @@
   "name": "music-assistant",
   "title": "Music Assistant",
   "description": "Control music assistant and displays current song in the menu bar",
-  "icon": "extension-icon.png",
+  "icon": "logo.png",
   "author": "72bpzvtqjq_privaterelay_appleid_com",
   "license": "MIT",
   "commands": [
     {
       "name": "menu-bar",
-      "title": "Music Assistant Menu Bar",
+      "title": "Menu Bar Player",
       "description": "Toggle the visibility of the menu bar",
-      "mode": "menu-bar"
+      "mode": "menu-bar",
+      "interval": "10s"
     },
     {
       "name": "next-song",
-      "title": "Music Assistant Next Song",
+      "title": "Next Song",
       "description": "Play the next song",
+      "mode": "no-view"
+    },
+    {
+      "name": "play-pause",
+      "title": "Toggle",
+      "subtitle": "Toggle play/pause",
+      "description": "pause the currently playing song or resume",
       "mode": "no-view"
     }
   ],
@@ -38,15 +46,6 @@
       "placeholder": "3e:39:eb:3c:39:8c",
       "defaultValue": "3e:39:eb:3c:39:8c",
       "description": "Enter the player ID of your Music Assistant player to control."
-    },
-    {
-      "name": "debug",
-      "label": "debug",
-      "type": "checkbox",
-      "required": false,
-      "title": "Show debug logging",
-      "defaultValue": false,
-      "description": "Show detailed logging of the core components."
     }
   ],
   "dependencies": {

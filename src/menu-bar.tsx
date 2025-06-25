@@ -1,57 +1,43 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { getPreferenceValues, Icon, MenuBarExtra } from "@raycast/api";
-import WS from "isomorphic-ws"; // polyfill for isomorphic ws
-globalThis.WebSocket = globalThis.WebSocket || WS; // set global WebSocket to the polyfill
-
-import { useEffect, useRef, useState } from "react";
-import { MusicAssistantApi } from "./music-assistant-api";
-import { EventType } from "./interfaces";
+import { useState } from "react";
 import { Prefs } from "./preferences";
+import executeApiCommand from "./api-command";
+import { usePromise } from "@raycast/utils";
+import { PlayerMedia, PlayerState } from "./interfaces";
 
 export default function Command() {
-  const { host, playerId, debug } = getPreferenceValues<Prefs>();
+  const { host, playerId } = getPreferenceValues<Prefs>();
 
-  const [isLoading, setIsLoading] = useState(true);
-  const [songTitle, setSongTitle] = useState<string>("");
-  const api = useRef<MusicAssistantApi | null>(null);
+  const { isLoading, data, revalidate } = usePromise(
+    async (host: string, playerId: string) =>
+      await executeApiCommand(host, async (api) => await api.getPlayer(playerId)),
+    [host, playerId],
+  );
 
-  function log(...args: any[]) {
-    if (debug) {
-      console.log("[Menu Bar]", ...args);
-    }
-  }
+  const format = (current: PlayerMedia | undefined) => `${current?.artist} - ${current?.title}`;
 
-  useEffect(() => {
-    const initApi = async () => {
-      api.current = new MusicAssistantApi(debug);
-      await api.current.initialize(host);
+  const next = async () =>
+    await executeApiCommand(host, async (api) => {
+      await api.playerCommandNext(playerId);
+      await revalidate();
+    });
 
-      api.current.subscribe(EventType.CONNECTED, async () => {
-        log("Connected, let's get the player details..");
-        setIsLoading(false);
-        const player = await api.current!.getPlayer(playerId);
-        const label = `${player.current_media?.artist} - ${player.current_media?.title}`;
-        setSongTitle(label);
-      });
-      api.current.subscribe(EventType.DISCONNECTED, async () => {
-        setIsLoading(true);
-      });
-      api.current.subscribe(
-        EventType.QUEUE_UPDATED,
-        async (data: { data: { queue_id: string; current_item: { name: string } } }) => {
-          log("Queue updated", data);
-          if (data.data.queue_id.toLowerCase() !== playerId.toLowerCase()) {
-            log("other player, do nothing..", data.data.queue_id);
-            return;
-          } else log("Player matched, updating title to", data.data.current_item.name);
-          setSongTitle(data.data.current_item.name);
-        },
-      );
-    };
-    initApi();
-    return () => api.current?.close();
-  }, [host, playerId, debug]);
+  const pause = async () =>
+    await executeApiCommand(host, async (api) => {
+      await api.playerCommandPlayPause(playerId);
+      await revalidate();
+    });
 
-  return <MenuBarExtra icon={Icon.SpeakerOn} isLoading={isLoading} title={songTitle}></MenuBarExtra>;
+  return (
+    <MenuBarExtra icon={data?.icon ?? "logo.png"} isLoading={isLoading} title={format(data?.current_media)}>
+      <MenuBarExtra.Item title="Next" icon={Icon.ArrowRight} onAction={next}></MenuBarExtra.Item>
+      <MenuBarExtra.Item
+      title={data?.state == PlayerState.PLAYING ? "Pause" : "Play"}
+      icon={data?.state == PlayerState.PLAYING ? Icon.Pause : Icon.Play}
+      onAction={pause}
+      ></MenuBarExtra.Item>
+    </MenuBarExtra>
+  );
 }
