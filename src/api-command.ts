@@ -7,12 +7,12 @@ globalThis.WebSocket = globalThis.WebSocket || WS; // set global WebSocket to th
 export default function executeApiCommand<T>(host: string, command: (api: MusicAssistantApi) => Promise<T>) {
   const api = new MusicAssistantApi();
 
-  return new Promise<T>(async (res) => {
+  return new Promise<T>((res) => {
     api.subscribe(EventType.CONNECTED, async () => {
       const result = await command(api);
       res(result);
       api.close();
     });
-    await api.initialize(host);
+    return api.initialize(host);
   });
 }

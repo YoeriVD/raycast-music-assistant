@@ -1,7 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import { getPreferenceValues, Icon, MenuBarExtra } from "@raycast/api";
-import { useState } from "react";
 import { Prefs } from "./preferences";
 import executeApiCommand from "./api-command";
 import { usePromise } from "@raycast/utils";
@@ -32,12 +29,14 @@ export default function Command() {
 
   return (
     <MenuBarExtra icon={data?.icon ?? "logo.png"} isLoading={isLoading} title={format(data?.current_media)}>
-      <MenuBarExtra.Item title="Next" icon={Icon.ArrowRight} onAction={next}></MenuBarExtra.Item>
-      <MenuBarExtra.Item
-      title={data?.state == PlayerState.PLAYING ? "Pause" : "Play"}
-      icon={data?.state == PlayerState.PLAYING ? Icon.Pause : Icon.Play}
-      onAction={pause}
-      ></MenuBarExtra.Item>
+      <MenuBarExtra.Section title="Controls">
+        <MenuBarExtra.Item title="Next" icon={Icon.ArrowRight} onAction={next}></MenuBarExtra.Item>
+        <MenuBarExtra.Item
+          title={data?.state == PlayerState.PLAYING ? "Pause" : "Play"}
+          icon={data?.state == PlayerState.PLAYING ? Icon.Pause : Icon.Play}
+          onAction={pause}
+        ></MenuBarExtra.Item>
+      </MenuBarExtra.Section>
     </MenuBarExtra>
   );
 }
