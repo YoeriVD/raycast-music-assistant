@@ -9,9 +9,14 @@ globalThis.WebSocket = globalThis.WebSocket || WS; // set global WebSocket to th
 export default async function main() {
   const { host, playerId, debug } = getPreferenceValues<Prefs>();
   const api = new MusicAssistantApi(debug);
-  await api.initialize(host);
-  api.subscribe(EventType.CONNECTED, async () => {
-    api.playerCommandNext(playerId);
-    api.close();
-  });
+
+  return new Promise(async (res) => {
+    api.subscribe(EventType.CONNECTED, async () => {
+      api.playerCommandNext(playerId);
+      api.close();
+      res(null);
+    });
+    await api.initialize(host);
+  })
+
 }
