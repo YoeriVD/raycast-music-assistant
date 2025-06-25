@@ -34,6 +34,9 @@ export default function Command() {
         const label = `${player.current_media?.artist} - ${player.current_media?.title}`;
         setSongTitle(label);
       });
+      api.current.subscribe(EventType.DISCONNECTED, async () => {
+        setIsLoading(true);
+      });
       api.current.subscribe(
         EventType.QUEUE_UPDATED,
         async (data: { data: { queue_id: string; current_item: { name: string } } }) => {
