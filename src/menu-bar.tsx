@@ -5,7 +5,7 @@ import { usePromise } from "@raycast/utils";
 import { PlayerState } from "./interfaces";
 
 export default function Command() {
-  let { host, playerId } = getPreferenceValues<Prefs>();
+  const { host, playerId } = getPreferenceValues<Prefs>();
   const { isLoading, data, revalidate } = usePromise(
     async (host: string, playerId: string) =>
       await executeApiCommand(host, async (api) => {
