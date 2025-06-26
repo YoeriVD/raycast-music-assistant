@@ -2,11 +2,10 @@ import { getPreferenceValues, Icon, MenuBarExtra } from "@raycast/api";
 import { Prefs } from "./preferences";
 import executeApiCommand from "./api-command";
 import { usePromise } from "@raycast/utils";
-import { PlayerMedia, PlayerState } from "./interfaces";
+import { PlayerState } from "./interfaces";
 
 export default function Command() {
   let { host, playerId } = getPreferenceValues<Prefs>();
-  playerId = "ap38420b59fde4";
   const { isLoading, data, revalidate } = usePromise(
     async (host: string, playerId: string) =>
       await executeApiCommand(host, async (api) => {
