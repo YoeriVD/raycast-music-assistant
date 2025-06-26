@@ -49,7 +49,9 @@ export enum ConnectionState {
   CONNECTING = 1,
   CONNECTED = 2,
 }
-
+/**
+ * ripped and adapted from https://github.com/music-assistant/frontend/blob/main/src/plugins/api/index.ts 
+ */
 export class MusicAssistantApi {
   private ws?: Websocket;
   private commandId: number;
