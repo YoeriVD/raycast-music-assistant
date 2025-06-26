@@ -50,13 +50,12 @@ export enum ConnectionState {
   CONNECTED = 2,
 }
 /**
- * ripped and adapted from https://github.com/music-assistant/frontend/blob/main/src/plugins/api/index.ts 
+ * ripped and adapted from https://github.com/music-assistant/frontend/blob/main/src/plugins/api/index.ts
  */
 export class MusicAssistantApi {
   private ws?: Websocket;
   private commandId: number;
   public baseUrl?: string;
-  // Replace Vue refs/reactive/computed with plain objects/properties
   public state: ConnectionState = ConnectionState.DISCONNECTED;
   public serverInfo?: ServerInfoMessage;
   public players: { [player_id: string]: Player } = {};

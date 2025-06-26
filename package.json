@@ -1,10 +1,11 @@
 {
   "$schema": "https://www.raycast.com/schemas/extension.json",
-  "name": "music-assistant",
-  "title": "Music Assistant",
+  "name": "music-assistant-controls",
+  "title": "Music Assistant Controls",
   "description": "Control music assistant and displays current song in the menu bar",
   "icon": "logo.png",
-  "author": "72bpzvtqjq_privaterelay_appleid_com",
+  "author": "yoerivd",
+  "categories": ["Media"],
   "license": "MIT",
   "commands": [
     {
