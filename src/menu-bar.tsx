@@ -14,8 +14,8 @@ export default function Command() {
         const song = player.current_media?.title;
         let title = `${artist} - ${song}`;
         if (!artist || !song) {
-          const queues = await api.getPlayerQueues();
-          const queue = queues.filter((q) => q.queue_id == playerId)[0];
+          const queue = await api.getPlayerQueue(playerId);
+          //const queue = queues.filter((q) => q.queue_id == playerId)[0];
           if (queue.current_item) {
             title = queue.current_item?.name;
           }
