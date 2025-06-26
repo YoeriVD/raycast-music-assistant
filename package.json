@@ -43,8 +43,6 @@
       "type": "textfield",
       "required": true,
       "title": "Default Player ID",
-      "placeholder": "3e:39:eb:3c:39:8c",
-      "defaultValue": "3e:39:eb:3c:39:8c",
       "description": "Enter the player ID of your Music Assistant player to control."
     }
   ],
