@@ -655,7 +655,7 @@ export class MusicAssistantApi {
   public async getPlayerQueue(queue_id: string): Promise<PlayerQueue> {
     // get specific queue
     return await this.sendCommand("player_queues/get", {
-      queue_id
+      queue_id,
     });
   }
 
