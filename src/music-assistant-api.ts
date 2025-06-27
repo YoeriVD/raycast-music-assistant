@@ -962,15 +962,6 @@ export class MusicAssistantApi {
     start_item?: PlayableMediaItemType | string,
     queue_id?: string,
   ): Promise<void> {
-    // if (
-    //   !queue_id &&
-    //   store.activePlayer?.active_source &&
-    //   store.activePlayer?.active_source in this.queues
-    // ) {
-    //   queue_id = store.activePlayer?.active_source;
-    // } else if (!queue_id) {
-    //   queue_id = store.activePlayer?.player_id;
-    // }
     return this.sendCommand("player_queues/play_media", {
       queue_id,
       media,
@@ -1240,11 +1231,6 @@ export class MusicAssistantApi {
       // always handle error (as we may be missing a resolve promise for this command)
       msg = msg as ErrorResultMessage;
       console.error("[resultMessage]", msg);
-      // store.activeAlert = {
-      //   type: AlertType.ERROR,
-      //   message: msg.details || msg.error_code,
-      //   persistent: false,
-      // };
     } else if (this.debug) {
       this.log("[resultMessage]", msg);
     }
