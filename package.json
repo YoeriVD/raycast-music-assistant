@@ -37,13 +37,6 @@
       "title": "Music Assistant Host",
       "placeholder": "http://192.168.0.166:8095",
       "description": "Enter the local address (IP, mDNS does not work well inside raycast) of your Music Assistant instance. This is usually the same as your Home Assistant URL, but with the port changed to 8095."
-    },
-    {
-      "name": "playerId",
-      "type": "textfield",
-      "required": true,
-      "title": "Default Player ID",
-      "description": "Enter the player ID of your Music Assistant player to control."
     }
   ],
   "dependencies": {
