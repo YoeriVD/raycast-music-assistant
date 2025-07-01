@@ -1,12 +1,10 @@
-import { getPreferenceValues, Icon, MenuBarExtra } from "@raycast/api";
-import { Prefs } from "./preferences";
+import { Icon, MenuBarExtra } from "@raycast/api";
 import executeApiCommand from "./api-command";
-import { useLocalStorage, usePromise } from "@raycast/utils";
+import { useCachedPromise, useLocalStorage, usePromise } from "@raycast/utils";
 import { Player, PlayerState } from "./interfaces";
 import { MusicAssistantApi } from "./music-assistant-api";
 
 export default function Command() {
-  const { host } = getPreferenceValues<Prefs>();
   const {
     value: selectedPlayerID,
     setValue: setSelectedPlayerID,
@@ -15,7 +13,7 @@ export default function Command() {
 
   const getCurrentMedia = async (api: MusicAssistantApi, player: Player) => {
     let title = "";
-    if (player.state === PlayerState.PLAYING) {
+    if (player.state !== PlayerState.IDLE) {
       const artist = player.current_media?.artist;
       const song = player.current_media?.title == "Music Assistant" ? undefined : player.current_media?.title;
       if (!artist || !song) {
@@ -36,27 +34,36 @@ export default function Command() {
   const {
     isLoading: isLoadingPlayers,
     data: players,
-    revalidate,
+    revalidate: revalidatePlayers,
+  } = useCachedPromise(
+    async () => await executeApiCommand(async (api): Promise<Player[]> => await api.getPlayers()),
+    [],
+    { initialData: [], keepPreviousData: true },
+  );
+
+  const {
+    isLoading: isLoadingMedia,
+    data: media,
+    revalidate: revalidateMedia,
   } = usePromise(
-    async (host: string) =>
-      await executeApiCommand(host, async (api): Promise<{ player: Player; title: string }[]> => {
-        const players = await api.getPlayers();
-        const media = await Promise.all(players.map(async (player) => await getCurrentMedia(api, player)));
-        return media || [];
-      }),
-    [host],
+    async (players: Player[]) =>
+      await executeApiCommand(
+        async (api) => await Promise.all(players.map(async (player) => await getCurrentMedia(api, player))),
+      ),
+    [players],
+    { execute: !isLoadingPlayers },
   );
 
   const next = async (playerId: string) =>
-    await executeApiCommand(host, async (api) => {
+    await executeApiCommand(async (api) => {
       await api.playerCommandNext(playerId);
-      await revalidate();
+      revalidateMedia();
     });
 
   const pause = async (playerId: string) =>
-    await executeApiCommand(host, async (api) => {
+    await executeApiCommand(async (api) => {
       await api.playerCommandPlayPause(playerId);
-      await revalidate();
+      revalidateMedia();
     });
 
   const getMenuBarText = (
@@ -64,18 +71,18 @@ export default function Command() {
     playerId: string | undefined,
   ): string => players?.filter((p) => p.player.player_id === playerId)[0].title ?? "";
 
-  if (!selectedPlayerID && players && players.length > 0) {
-    setSelectedPlayerID(players[0].player.player_id);
+  if (!selectedPlayerID && media && media.length > 0) {
+    setSelectedPlayerID(media[0].player.player_id);
   }
 
   return (
     <MenuBarExtra
       icon="logo.png"
-      isLoading={isLoadingPlayers && isLoadingPlayerId}
-      title={getMenuBarText(players, selectedPlayerID)}
+      isLoading={isLoadingPlayers && isLoadingPlayerId && isLoadingMedia}
+      title={getMenuBarText(media, selectedPlayerID)}
     >
-      {players &&
-        players
+      {media &&
+        media
           .filter((p) => p.title)
           .map(({ player, title }) => (
             <MenuBarExtra.Section title={player.name} key={player.player_id}>
@@ -95,6 +102,13 @@ export default function Command() {
               ></MenuBarExtra.Item>
             </MenuBarExtra.Section>
           ))}
+      <MenuBarExtra.Section>
+        <MenuBarExtra.Item
+          title="Refresh"
+          icon={Icon.RotateAntiClockwise}
+          onAction={revalidatePlayers}
+        ></MenuBarExtra.Item>
+      </MenuBarExtra.Section>
     </MenuBarExtra>
   );
 }
