@@ -9,7 +9,7 @@ export default function Command() {
     isLoading,
     data: players,
     revalidate: revalidatePlayers,
-  } = useCachedPromise((c: MusicAssistantClient) => c.getActivePlayers(), [client], {
+  } = useCachedPromise(() => client.getActivePlayers(), [], {
     keepPreviousData: true,
     initialData: [],
   });
