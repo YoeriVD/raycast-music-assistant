@@ -22,6 +22,6 @@ export default function executeApiCommand<T>(command: (api: MusicAssistantApi) =
         api.close();
       }
     });
-    return api.initialize(host);
+    api.initialize(host);
   });
 }

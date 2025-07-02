@@ -11,6 +11,7 @@ export default function Command() {
     revalidate: revalidatePlayers,
   } = useCachedPromise((c: MusicAssistantClient) => c.getActivePlayers(), [client], {
     keepPreviousData: true,
+    initialData: [],
   });
   const {
     value: selectedPlayerID,
