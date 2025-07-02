@@ -1300,7 +1300,7 @@ export class MusicAssistantApi {
 
   private _sendCommand(command: string, args?: Record<string, any>, msgId?: number): void {
     if (this.state !== ConnectionState.CONNECTED) {
-      throw new Error("Connection lost");
+      throw new Error(`Connection lost, currently ${this.state}`);
     }
 
     if (!msgId) {

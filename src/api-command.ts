@@ -10,7 +10,6 @@ const { host } = getPreferenceValues<Prefs>();
 
 export default function executeApiCommand<T>(command: (api: MusicAssistantApi) => Promise<T>) {
   const api = new MusicAssistantApi();
-
   return new Promise<T>((res, rej) => {
     api.subscribe(EventType.CONNECTED, async () => {
       try {
