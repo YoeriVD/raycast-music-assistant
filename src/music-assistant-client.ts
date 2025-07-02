@@ -16,7 +16,7 @@ export class MusicAssistantClient {
   async getActivePlayers() {
     return await executeApiCommand(async (api) => {
       const players = await api.getPlayers();
-      return await Promise.all(
+      const activePlayers = await Promise.all(
         players
           .filter((p) => p.state !== PlayerState.IDLE)
           .map(
@@ -26,6 +26,7 @@ export class MusicAssistantClient {
             }),
           ),
       );
+      return activePlayers;
     });
   }
 

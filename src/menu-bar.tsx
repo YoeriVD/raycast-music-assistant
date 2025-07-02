@@ -1,18 +1,11 @@
 import { Icon, MenuBarExtra } from "@raycast/api";
-import { useCachedPromise, useLocalStorage } from "@raycast/utils";
+import { useCachedPromise, useLocalStorage, usePromise } from "@raycast/utils";
 import { PlayerState } from "./interfaces";
 import { MusicAssistantClient } from "./music-assistant-client";
 
 export default function Command() {
   const client = new MusicAssistantClient();
-  const {
-    isLoading,
-    data: players,
-    revalidate: revalidatePlayers,
-  } = useCachedPromise(() => client.getActivePlayers(), [], {
-    keepPreviousData: true,
-    initialData: [],
-  });
+  const { isLoading, data: players, revalidate: revalidatePlayers } = usePromise(() => client.getActivePlayers());
   const {
     value: selectedPlayerID,
     setValue: setSelectedPlayerID,
