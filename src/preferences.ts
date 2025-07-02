@@ -3,6 +3,4 @@ export interface Prefs {
   playerId: string;
 }
 
-export default function usePreferences(){
-  
-}
+export default function usePreferences() {}
