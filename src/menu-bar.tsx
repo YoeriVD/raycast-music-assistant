@@ -5,7 +5,14 @@ import { MusicAssistantClient } from "./music-assistant-client";
 
 export default function Command() {
   const client = new MusicAssistantClient();
-  const { isLoading, data: players, revalidate: revalidatePlayers } = usePromise(() => client.getActivePlayers());
+  const {
+    isLoading,
+    data: players,
+    revalidate: revalidatePlayers,
+  } = useCachedPromise((client: MusicAssistantClient) => client.getActivePlayers(), [client], {
+    keepPreviousData: true,
+    initialData: [],
+  });
   const {
     value: selectedPlayerID,
     setValue: setSelectedPlayerID,
