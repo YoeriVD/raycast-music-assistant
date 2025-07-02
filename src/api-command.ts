@@ -1,23 +1,31 @@
 import { EventType } from "./interfaces";
 import { MusicAssistantApi } from "./music-assistant-api";
 
-import WS from "isomorphic-ws"; // polyfill for isomorphic ws
-globalThis.WebSocket = globalThis.WebSocket || WS; // set global WebSocket to the polyfill
+import "./polyfills";
 
 export default function executeApiCommand<T>(host: string, command: (api: MusicAssistantApi) => Promise<T>) {
   const api = new MusicAssistantApi();
 
   return new Promise<T>((res, rej) => {
-    api.subscribe(EventType.CONNECTED, async () => {
+    api.subscribe_multi([EventType.CONNECTED, EventType.Error], async (eventData: any) => {
       try {
-        const result = await command(api);
-        res(result);
-      } catch (error) {
+        if (eventData.event === EventType.Error) {
+          console.log("[API COMMAND]", eventData);
+          rej(eventData.data);
+        } else {
+          const result = await command(api);
+          res(result);
+        }
+      } catch (error: any) {
         rej(error);
       } finally {
         api.close();
       }
     });
-    return api.initialize(host);
+    try {
+      api.initialize(host);
+    } catch (error) {
+      rej(error);
+    }
   });
 }
