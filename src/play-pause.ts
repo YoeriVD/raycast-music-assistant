@@ -1,5 +1,5 @@
-import executeApiCommand from "./api-command";
 import { showFailureToast, useLocalStorage } from "@raycast/utils";
+import { MusicAssistantClient } from "./music-assistant-client";
 
 export default async function main() {
   const { value: selectedPlayerID } = useLocalStorage("selectedPlayerID", "");
@@ -7,5 +7,5 @@ export default async function main() {
     await showFailureToast("Please select a player from the menubar first");
     return;
   }
-  await executeApiCommand(async (api) => await api.playerCommandPlayPause(selectedPlayerID));
+  await new MusicAssistantClient().togglePlayPause(selectedPlayerID);
 }
