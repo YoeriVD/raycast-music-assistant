@@ -5,7 +5,9 @@
   "description": "Control music assistant and displays current song in the menu bar",
   "icon": "logo.png",
   "author": "yoerivd",
-  "categories": ["Media"],
+  "categories": [
+    "Media"
+  ],
   "license": "MIT",
   "commands": [
     {
@@ -18,14 +20,14 @@
     {
       "name": "next-song",
       "title": "Next Song",
-      "description": "Play the next song",
+      "description": "Skips to the next song on the currently selected menu bar player.",
       "mode": "no-view"
     },
     {
       "name": "play-pause",
       "title": "Toggle",
       "subtitle": "Toggle play/pause",
-      "description": "pause the currently playing song or resume",
+      "description": "Plays or pauses song on the currently selected menu bar player.",
       "mode": "no-view"
     }
   ],
