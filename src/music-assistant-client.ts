@@ -1,6 +1,6 @@
 import executeApiCommand from "./api-command";
 
-export class MusicAssistantClient {
+export default class MusicAssistantClient {
   async next(playerId: string) {
     await executeApiCommand(async (api) => {
       await api.playerCommandNext(playerId);

@@ -1,7 +1,7 @@
-import { Icon, MenuBarExtra } from "@raycast/api";
+import { Icon, MenuBarExtra, openExtensionPreferences } from "@raycast/api";
 import { useCachedPromise, useLocalStorage } from "@raycast/utils";
 import { PlayerState } from "./interfaces";
-import { MusicAssistantClient } from "./music-assistant-client";
+import MusicAssistantClient from "./music-assistant-client";
 
 export default function Command() {
   const client = new MusicAssistantClient();
@@ -39,13 +39,21 @@ export default function Command() {
             ></MenuBarExtra.Item>
           </MenuBarExtra.Section>
         ))}
-      <MenuBarExtra.Section>
+      {queues ? (
+        <MenuBarExtra.Section>
+          <MenuBarExtra.Item
+            title="Refresh"
+            icon={Icon.RotateAntiClockwise}
+            onAction={revalidatePlayers}
+          ></MenuBarExtra.Item>
+        </MenuBarExtra.Section>
+      ) : (
         <MenuBarExtra.Item
-          title="Refresh"
-          icon={Icon.RotateAntiClockwise}
-          onAction={revalidatePlayers}
+          title="Fix configuration"
+          icon={Icon.WrenchScrewdriver}
+          onAction={openExtensionPreferences}
         ></MenuBarExtra.Item>
-      </MenuBarExtra.Section>
+      )}
     </MenuBarExtra>
   );
 }

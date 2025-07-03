@@ -1,12 +1,12 @@
-import { getPreferenceValues } from "@raycast/api";
-import { Prefs } from "./preferences";
-import executeApiCommand from "./api-command";
 import { showFailureToast } from "@raycast/utils";
+import MusicAssistantClient from "./music-assistant-client";
+import useSelectedPlayerID from "./use-selected-player-id";
 
 export default async function main() {
-  const { host, playerId } = getPreferenceValues<Prefs>();
+  const selectedPlayerID = useSelectedPlayerID();
+  if (!selectedPlayerID) return;
   try {
-    await executeApiCommand(host, async (api) => await api.playerCommandPlayPause(playerId));
+    await new MusicAssistantClient().togglePlayPause(selectedPlayerID);
   } catch (error) {
     showFailureToast(error, {
       title: "Couldn't reach Music Assistant",
