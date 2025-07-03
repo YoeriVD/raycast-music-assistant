@@ -1,26 +1,31 @@
 import { getPreferenceValues } from "@raycast/api";
 import { EventType } from "./interfaces";
 import { MusicAssistantApi } from "./music-assistant-api";
+import "./polyfills";
 
-import WS from "isomorphic-ws"; // polyfill for isomorphic ws
-import { Prefs } from "./preferences";
-globalThis.WebSocket = globalThis.WebSocket || WS; // set global WebSocket to the polyfill
-
-const { host } = getPreferenceValues<Prefs>();
-
-export default function executeApiCommand<T>(command: (api: MusicAssistantApi) => Promise<T>) {
+export default function executeApiCommand<T>(host: string, command: (api: MusicAssistantApi) => Promise<T>) {
   const api = new MusicAssistantApi();
   return new Promise<T>((res, rej) => {
-    api.subscribe(EventType.CONNECTED, async () => {
+    /* eslint-disable @typescript-eslint/no-explicit-any */
+    api.subscribe_multi([EventType.CONNECTED, EventType.Error], async (eventData: any) => {
       try {
-        const result = await command(api);
-        res(result);
-      } catch (error) {
+        if (eventData.event === EventType.Error) {
+          rej(eventData.data);
+        } else {
+          const result = await command(api);
+          res(result);
+        }
+      } catch (error: any) {
+        /* eslint-enable @typescript-eslint/no-explicit-any */
         rej(error);
       } finally {
         api.close();
       }
     });
-    api.initialize(host);
+    try {
+      api.initialize(host);
+    } catch (error) {
+      rej(error);
+    }
   });
 }
