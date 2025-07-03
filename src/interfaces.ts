@@ -299,7 +299,7 @@ export enum EventType {
   CONNECTED = "connected",
   DISCONNECTED = "disconnected",
   ALL = "*",
-  Error = "Error",
+  Error = "error",
 }
 
 export enum BuiltinPlayerEventType {

@@ -22,7 +22,11 @@ export default function Command() {
   const selectedPlayer = queues && queues.find((q) => q.queue_id === selectedQueueID);
 
   return (
-    <MenuBarExtra icon="logo.png" isLoading={isLoading && isLoadingQueueId} title={selectedPlayer?.current_item?.name}>
+    <MenuBarExtra
+      icon="transparent-logo.png"
+      isLoading={isLoading && isLoadingQueueId}
+      title={selectedPlayer?.current_item?.name}
+    >
       {queues &&
         queues.map(({ state, queue_id, current_item, display_name }) => (
           <MenuBarExtra.Section title={current_item?.name || ""} key={queue_id}>
