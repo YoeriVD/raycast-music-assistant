@@ -1,8 +1,9 @@
 import { showToast, launchCommand, LaunchType } from "@raycast/api";
 import { useLocalStorage } from "@raycast/utils";
 
-export default function useSelectedPlayerID() {
-  const { value: selectedPlayerID } = useLocalStorage("selectedPlayerID", "");
+export const selectedPlayerKey = "queue_id";
+export function useSelectedPlayerID() {
+  const { value: selectedPlayerID } = useLocalStorage(selectedPlayerKey, "");
   if (!selectedPlayerID) {
     showToast({
       title: "No player selected!",

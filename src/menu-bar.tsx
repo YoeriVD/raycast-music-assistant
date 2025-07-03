@@ -1,7 +1,9 @@
 import { Icon, MenuBarExtra, openExtensionPreferences } from "@raycast/api";
 import { useCachedPromise, useLocalStorage } from "@raycast/utils";
-import { PlayerState } from "./interfaces";
+import { PlayerQueue, PlayerState } from "./interfaces";
 import MusicAssistantClient from "./music-assistant-client";
+import { useEffect, useState } from "react";
+import { selectedPlayerKey } from "./use-selected-player-id";
 
 export default function Command() {
   const client = new MusicAssistantClient();
@@ -13,33 +15,44 @@ export default function Command() {
     keepPreviousData: true,
     initialData: [],
   });
-  const {
-    value: selectedQueueID,
-    setValue: setSelectedQueueID,
-    isLoading: isLoadingQueueId,
-  } = useLocalStorage("selectedPlayerID", queues && queues.length > 0 ? queues[0].queue_id : "");
 
-  const selectedPlayer = queues && queues.find((q) => q.queue_id === selectedQueueID);
+  const {
+    value: storedQueueId,
+    setValue: storeQueueId,
+    isLoading: isLoadingQueueId,
+  } = useLocalStorage<string>(selectedPlayerKey);
+
+  const [title, setTitle] = useState<string>();
+
+  useEffect(() => {
+    const queue = queues.find((q) => q.queue_id === storedQueueId);
+    const current_item = queue?.current_item;
+    if (current_item?.name) setTitle(current_item.name);
+  }, [storedQueueId]);
+
+  const selectPlayerForMenuBar = ({ queue_id, current_item }: PlayerQueue) => {
+    if (current_item?.name) setTitle(current_item.name);
+    if (storedQueueId !== queue_id) storeQueueId(queue_id);
+  };
 
   return (
-    <MenuBarExtra
-      icon="transparent-logo.png"
-      isLoading={isLoading && isLoadingQueueId}
-      title={selectedPlayer?.current_item?.name}
-    >
+    <MenuBarExtra icon="transparent-logo.png" isLoading={isLoading} title={title}>
       {queues &&
-        queues.map(({ state, queue_id, current_item, display_name }) => (
-          <MenuBarExtra.Section title={current_item?.name || ""} key={queue_id}>
-            <MenuBarExtra.Item title={display_name} onAction={() => setSelectedQueueID(queue_id)}></MenuBarExtra.Item>
+        queues.map((queue) => (
+          <MenuBarExtra.Section title={queue.current_item?.name || ""} key={queue.queue_id}>
+            <MenuBarExtra.Item
+              title={queue.display_name}
+              onAction={() => selectPlayerForMenuBar(queue)}
+            ></MenuBarExtra.Item>
             <MenuBarExtra.Item
               title="Next"
               icon={Icon.ArrowRight}
-              onAction={() => client.next(queue_id)}
+              onAction={() => client.next(queue.queue_id)}
             ></MenuBarExtra.Item>
             <MenuBarExtra.Item
-              title={state == PlayerState.PLAYING ? "Pause" : "Play"}
-              icon={state == PlayerState.PLAYING ? Icon.Pause : Icon.Play}
-              onAction={() => client.togglePlayPause(queue_id)}
+              title={queue.state == PlayerState.PLAYING ? "Pause" : "Play"}
+              icon={queue.state == PlayerState.PLAYING ? Icon.Pause : Icon.Play}
+              onAction={() => client.togglePlayPause(queue.queue_id)}
             ></MenuBarExtra.Item>
           </MenuBarExtra.Section>
         ))}

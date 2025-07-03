@@ -1,6 +1,6 @@
 import { showFailureToast } from "@raycast/utils";
-import useSelectedPlayerID from "./use-selected-player-id";
 import MusicAssistantClient from "./music-assistant-client";
+import { useSelectedPlayerID } from "./use-selected-player-id";
 
 export default async function main() {
   const selectedPlayerID = useSelectedPlayerID();
