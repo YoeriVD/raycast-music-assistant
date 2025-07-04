@@ -13,20 +13,22 @@
     {
       "name": "menu-bar",
       "title": "Menu Bar Player",
-      "description": "Toggle the visibility of the menu bar",
+      "subtitle": "Activate controls from the menubar",
+      "description": "Activates the menu bar, showing the current song and controls for all players.",
       "mode": "menu-bar",
       "interval": "10s"
     },
     {
       "name": "next-song",
       "title": "Next Song",
+      "subtitle": "Next song in queue on the active player.",
       "description": "Skips to the next song on the currently selected menu bar player.",
       "mode": "no-view"
     },
     {
       "name": "play-pause",
       "title": "Toggle",
-      "subtitle": "Toggle play/pause",
+      "subtitle": "Toggle play/pause on the active player.",
       "description": "Plays or pauses song on the currently selected menu bar player.",
       "mode": "no-view"
     },
