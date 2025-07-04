@@ -22,7 +22,7 @@ export default function Command() {
 
   useEffect(() => {
     if (queues.length === 0) return;
-    let queue = storedQueueId?.queue_id ? queues.find((q) => q.queue_id === storedQueueId.queue_id) : queues[0];
+    const queue = storedQueueId?.queue_id ? queues.find((q) => q.queue_id === storedQueueId.queue_id) : queues[0];
     const current_item = queue?.current_item;
     if (current_item?.name && current_item.name !== title) setTitle(current_item.name);
   }, [storedQueueId]);
