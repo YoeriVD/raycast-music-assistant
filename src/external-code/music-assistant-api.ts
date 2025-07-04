@@ -1274,8 +1274,6 @@ export class MusicAssistantApi {
     }
     this.serverInfo = msg;
     this.state = ConnectionState.CONNECTED;
-    // trigger fetch of full state once we are connected to the server
-    this._fetchState();
     this.signalEvent({
       event: EventType.CONNECTED,
       object_id: "",
@@ -1306,7 +1304,7 @@ export class MusicAssistantApi {
 
   private _sendCommand(command: string, args?: Record<string, any>, msgId?: number): void {
     if (this.state !== ConnectionState.CONNECTED) {
-      throw new Error("Connection lost");
+      throw new Error(`Connection lost, currently ${ConnectionState[this.state]}, command: ${command}`);
     }
 
     if (!msgId) {
@@ -1322,28 +1320,6 @@ export class MusicAssistantApi {
     this.log("[sendCommand]", msg);
 
     this.ws!.send(JSON.stringify(msg));
-  }
-
-  private async _fetchState() {
-    // fetch full initial state
-    for (const player of await this.getPlayers()) {
-      // ignore unavailable players in the initial state
-      if (!player.available) continue;
-      this.players[player.player_id] = player;
-    }
-    for (const queue of await this.getPlayerQueues()) {
-      this.queues[queue.queue_id] = queue;
-    }
-
-    for (const prov of await this.sendCommand<ProviderManifest[]>("providers/manifests")) {
-      this.providerManifests[prov.domain] = prov;
-    }
-
-    for (const prov of await this.sendCommand<ProviderInstance[]>("providers")) {
-      this.providers[prov.instance_id] = prov;
-    }
-
-    this.syncTasks = await this.sendCommand<SyncTask[]>("music/synctasks");
   }
 
   private _genCmdId() {

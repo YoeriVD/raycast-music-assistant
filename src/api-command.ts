@@ -1,10 +1,13 @@
-import { EventType } from "./interfaces";
-import { MusicAssistantApi } from "./music-assistant-api";
+import { getPreferenceValues } from "@raycast/api";
+import { EventType } from "./external-code/interfaces";
+import { MusicAssistantApi } from "./external-code/music-assistant-api";
 import "./polyfills";
+import { Prefs } from "./preferences";
 
-export default function executeApiCommand<T>(host: string, command: (api: MusicAssistantApi) => Promise<T>) {
+const { host } = getPreferenceValues<Prefs>();
+
+export default function executeApiCommand<T>(command: (api: MusicAssistantApi) => Promise<T>) {
   const api = new MusicAssistantApi();
-
   return new Promise<T>((res, rej) => {
     /* eslint-disable @typescript-eslint/no-explicit-any */
     api.subscribe_multi([EventType.CONNECTED, EventType.Error], async (eventData: any) => {

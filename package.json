@@ -13,22 +13,32 @@
     {
       "name": "menu-bar",
       "title": "Menu Bar Player",
-      "description": "Toggle the visibility of the menu bar",
+      "subtitle": "Activate controls from the menubar",
+      "description": "Activates the menu bar, showing the current song and controls for all players.",
       "mode": "menu-bar",
       "interval": "10s"
     },
     {
       "name": "next-song",
       "title": "Next Song",
-      "description": "Play the next song",
+      "subtitle": "Next song in queue on the active player.",
+      "description": "Skips to the next song on the currently selected menu bar player.",
       "mode": "no-view"
     },
     {
       "name": "play-pause",
       "title": "Toggle",
-      "subtitle": "Toggle play/pause",
-      "description": "pause the currently playing song or resume",
+      "subtitle": "Toggle play/pause on the active player.",
+      "description": "Plays or pauses song on the currently selected menu bar player.",
       "mode": "no-view"
+    },
+    {
+      "name": "set-active-player",
+      "title": "Set Active Player",
+      "description": "Configures which player to show in the menu bar and to execute other commands on",
+      "mode": "view",
+      "subtitle": "Configure the player to run commands on",
+      "icon": "logo.png"
     }
   ],
   "preferences": [
@@ -39,13 +49,6 @@
       "title": "Music Assistant Host",
       "placeholder": "http://192.168.0.166:8095",
       "description": "Enter the local address (IP, mDNS does not work well inside raycast) of your Music Assistant instance. This is usually the same as your Home Assistant URL, but with the port changed to 8095."
-    },
-    {
-      "name": "playerId",
-      "type": "textfield",
-      "required": true,
-      "title": "Default Player ID",
-      "description": "Enter the player ID of your Music Assistant player to control."
     }
   ],
   "dependencies": {
@@ -57,10 +60,13 @@
   },
   "devDependencies": {
     "@raycast/eslint-config": "^2.0.4",
+    "@types/jest": "^29.5.12",
     "@types/node": "22.16.0",
     "@types/react": "19.1.8",
     "eslint": "^9.22.0",
+    "jest": "^29.7.0",
     "prettier": "^3.5.3",
+    "ts-jest": "^29.1.2",
     "typescript": "^5.8.2"
   },
   "scripts": {
@@ -68,6 +74,10 @@
     "dev": "ray develop",
     "fix-lint": "ray lint --fix",
     "lint": "ray lint",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:coverage:enforce": "jest --coverage --coverageThreshold='{\"global\":{\"branches\":100,\"functions\":100,\"lines\":100,\"statements\":100}}'",
     "prepublishOnly": "echo \"\\n\\nIt seems like you are trying to publish the Raycast extension to npm.\\n\\nIf you did intend to publish it to npm, remove the \\`prepublishOnly\\` script and rerun \\`npm publish\\` again.\\nIf you wanted to publish it to the Raycast Store instead, use \\`npm run publish\\` instead.\\n\\n\" && exit 1",
     "publish": "npx @raycast/api@latest publish"
   }
