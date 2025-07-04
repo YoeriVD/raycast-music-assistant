@@ -3,6 +3,7 @@ export const getPreferenceValues = jest.fn(() => ({
 }));
 
 export const showToast = jest.fn();
+export const showHUD = jest.fn();
 export const launchCommand = jest.fn();
 
 export const LocalStorage = {

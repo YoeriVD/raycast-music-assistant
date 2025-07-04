@@ -1,6 +1,6 @@
 import { getPreferenceValues } from "@raycast/api";
-import { EventType } from "./interfaces";
-import { MusicAssistantApi } from "./music-assistant-api";
+import { EventType } from "./external-code/interfaces";
+import { MusicAssistantApi } from "./external-code/music-assistant-api";
 import "./polyfills";
 import { Prefs } from "./preferences";
 

@@ -1,11 +1,11 @@
 import { getPreferenceValues } from "@raycast/api";
 import executeApiCommand from "../src/api-command";
-import { MusicAssistantApi } from "../src/music-assistant-api";
-import { EventType } from "../src/interfaces";
+import { MusicAssistantApi } from "../src/external-code/music-assistant-api";
+import { EventType } from "../src/external-code/interfaces";
 
 // Mock dependencies
 jest.mock("@raycast/api");
-jest.mock("../src/music-assistant-api");
+jest.mock("../src/external-code/music-assistant-api");
 jest.mock("../src/polyfills");
 
 const mockGetPreferenceValues = getPreferenceValues as jest.MockedFunction<typeof getPreferenceValues>;

@@ -1,7 +1,6 @@
-import { Action, ActionPanel, Icon, List, showHUD } from "@raycast/api";
+import { Action, ActionPanel, Icon, List } from "@raycast/api";
 import MusicAssistantClient from "./music-assistant-client";
 import { useCachedPromise } from "@raycast/utils";
-import { storeSelectedQueueID } from "./use-selected-player-id";
 
 export default function SetActivePlayerCommand() {
   const client = new MusicAssistantClient();
@@ -15,8 +14,7 @@ export default function SetActivePlayerCommand() {
   });
 
   const select = async (queue_id: string, display_name: string) => {
-    await storeSelectedQueueID(queue_id);
-    await showHUD(`${display_name} selected, allow 10 seconds for the menubar to update!`);
+    await client.selectPlayer(queue_id, display_name);
   };
 
   return (

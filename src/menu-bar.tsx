@@ -1,6 +1,6 @@
 import { Icon, MenuBarExtra, openExtensionPreferences } from "@raycast/api";
 import { useCachedPromise, useLocalStorage } from "@raycast/utils";
-import { PlayerQueue, PlayerState } from "./interfaces";
+import { PlayerQueue } from "./external-code/interfaces";
 import MusicAssistantClient from "./music-assistant-client";
 import { useEffect, useState } from "react";
 import { selectedPlayerKey, StoredQueue } from "./use-selected-player-id";
@@ -21,15 +21,24 @@ export default function Command() {
   const [title, setTitle] = useState<string>();
 
   useEffect(() => {
-    if (queues.length === 0) return;
-    const queue = storedQueueId?.queue_id ? queues.find((q) => q.queue_id === storedQueueId.queue_id) : queues[0];
-    const current_item = queue?.current_item;
-    if (current_item?.name && current_item.name !== title) setTitle(current_item.name);
-  }, [storedQueueId]);
+    const activeQueue = client.findActiveQueue(queues, storedQueueId);
+    const newTitle = client.getDisplayTitle(activeQueue);
 
-  const selectPlayerForMenuBar = ({ queue_id, current_item }: PlayerQueue) => {
-    if (current_item?.name) setTitle(current_item.name);
-    if (storedQueueId?.queue_id !== queue_id) storeQueueId({ queue_id });
+    if (client.shouldUpdateTitle(title, newTitle)) {
+      setTitle(newTitle);
+    }
+  }, [storedQueueId, queues]);
+
+  const selectPlayerForMenuBar = (queue: PlayerQueue) => {
+    const selection = client.createQueueSelection(queue);
+
+    if (selection.title) {
+      setTitle(selection.title);
+    }
+
+    if (storedQueueId?.queue_id !== selection.queueId) {
+      storeQueueId({ queue_id: selection.queueId });
+    }
   };
 
   return (
@@ -48,8 +57,8 @@ export default function Command() {
               onAction={() => client.next(queue.queue_id)}
             ></MenuBarExtra.Item>
             <MenuBarExtra.Item
-              title={queue.state == PlayerState.PLAYING ? "Pause" : "Play"}
-              icon={queue.state == PlayerState.PLAYING ? Icon.Pause : Icon.Play}
+              title={client.getPlayPauseButtonText(queue.state)}
+              icon={client.isPlaying(queue.state) ? Icon.Pause : Icon.Play}
               onAction={() => client.togglePlayPause(queue.queue_id)}
             ></MenuBarExtra.Item>
           </MenuBarExtra.Section>

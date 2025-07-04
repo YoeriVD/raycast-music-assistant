@@ -13,8 +13,11 @@ module.exports = {
     'src/**/*.{ts,tsx}',
     '!src/**/*.d.ts',
     '!src/polyfills.ts',
-    '!src/interfaces.ts',
-    '!src/music-assistant-api.ts'
+    // Exclude external code
+    '!src/external-code/**/*',
+    // Exclude UI components that use Raycast UI primitives
+    '!src/menu-bar.tsx',
+    '!src/set-active-player.tsx'
   ],
   coverageDirectory: 'coverage',
   coverageReporters: ['text', 'lcov', 'html'],
