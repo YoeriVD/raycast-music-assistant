@@ -16,16 +16,13 @@ export default function Command() {
     initialData: [],
   });
 
-  const {
-    value: storedQueueId,
-    setValue: storeQueueId,
-    isLoading: isLoadingQueueId,
-  } = useLocalStorage<string>(selectedPlayerKey);
+  const { value: storedQueueId, setValue: storeQueueId } = useLocalStorage<string>(selectedPlayerKey);
 
   const [title, setTitle] = useState<string>();
 
   useEffect(() => {
-    const queue = queues.find((q) => q.queue_id === storedQueueId);
+    if (queues.length === 0) return;
+    const queue = storedQueueId ? queues.find((q) => q.queue_id === storedQueueId) : queues[0];
     const current_item = queue?.current_item;
     if (current_item?.name) setTitle(current_item.name);
   }, [storedQueueId]);
@@ -39,9 +36,10 @@ export default function Command() {
     <MenuBarExtra icon="transparent-logo.png" isLoading={isLoading} title={title}>
       {queues &&
         queues.map((queue) => (
-          <MenuBarExtra.Section title={queue.current_item?.name || ""} key={queue.queue_id}>
+          <MenuBarExtra.Section title={queue.display_name} key={queue.queue_id}>
             <MenuBarExtra.Item
-              title={queue.display_name}
+              icon={Icon.Eye}
+              title={queue.current_item?.name || ""}
               onAction={() => selectPlayerForMenuBar(queue)}
             ></MenuBarExtra.Item>
             <MenuBarExtra.Item
