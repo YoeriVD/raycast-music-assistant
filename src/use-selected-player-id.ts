@@ -18,5 +18,5 @@ export async function getSelectedQueueID() {
       },
     });
   }
-  return selectedPlayerID.queue_id;
+  return selectedPlayerID?.queue_id;
 }
