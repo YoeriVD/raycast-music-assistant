@@ -16,20 +16,20 @@ export default function Command() {
     initialData: [],
   });
 
-  const { value: storedQueueId, setValue: storeQueueId } = useLocalStorage<string>(selectedPlayerKey);
+  const { value: storedQueueId, setValue: storeQueueId } = useLocalStorage<{ queue_id: string }>(selectedPlayerKey);
 
   const [title, setTitle] = useState<string>();
 
   useEffect(() => {
     if (queues.length === 0) return;
-    const queue = storedQueueId ? queues.find((q) => q.queue_id === storedQueueId) : queues[0];
+    const queue = storedQueueId?.queue_id ? queues.find((q) => q.queue_id === storedQueueId.queue_id) : queues[0];
     const current_item = queue?.current_item;
     if (current_item?.name) setTitle(current_item.name);
   }, [storedQueueId]);
 
   const selectPlayerForMenuBar = ({ queue_id, current_item }: PlayerQueue) => {
     if (current_item?.name) setTitle(current_item.name);
-    if (storedQueueId !== queue_id) storeQueueId(queue_id);
+    if (storedQueueId?.queue_id !== queue_id) storeQueueId({ queue_id });
   };
 
   return (
