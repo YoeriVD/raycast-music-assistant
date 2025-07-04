@@ -11,10 +11,10 @@ export async function getSelectedQueueID() {
   const selectedPlayerID: StoredQueue = storedObj ? JSON.parse(storedObj) : null;
   if (!selectedPlayerID) {
     showToast({
-      title: "No player selected!",
+      title: "😲 No player selected!",
       message: "Please select an active player first.",
       primaryAction: {
-        title: "Activate Menu Bar",
+        title: "Set Active Player",
         onAction: () =>
           launchCommand({
             name: "set-active-player",

@@ -9,7 +9,7 @@ export default async function main() {
     await new MusicAssistantClient().togglePlayPause(selectedPlayerID);
   } catch (error) {
     showFailureToast(error, {
-      title: "Couldn't reach Music Assistant",
+      title: "💥 Something went wrong!",
     });
   }
 }

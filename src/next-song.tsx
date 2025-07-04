@@ -9,7 +9,7 @@ export default async function main() {
     await new MusicAssistantClient().next(selectedPlayerID);
   } catch (error) {
     showFailureToast(error, {
-      title: "Something went wrong!",
+      title: "💥 Something went wrong!",
     });
   }
 }
