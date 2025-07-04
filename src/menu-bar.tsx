@@ -22,9 +22,13 @@ export default function Command() {
 
   useEffect(() => {
     if (queues.length === 0) return;
-    const queue = storedQueueId?.queue_id ? queues.find((q) => q.queue_id === storedQueueId.queue_id) : queues[0];
+    let queue = storedQueueId?.queue_id ? queues.find((q) => q.queue_id === storedQueueId.queue_id) : undefined;
+    if (!queue) {
+      queue = queues[0]!;
+      storeQueueId({ queue_id: queue.queue_id });
+    }
     const current_item = queue?.current_item;
-    if (current_item?.name) setTitle(current_item.name);
+    if (current_item?.name && current_item.name !== title) setTitle(current_item.name);
   }, [storedQueueId]);
 
   const selectPlayerForMenuBar = ({ queue_id, current_item }: PlayerQueue) => {
