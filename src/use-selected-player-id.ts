@@ -11,7 +11,7 @@ export async function getSelectedQueueID() {
     const storedObj = await LocalStorage.getItem<string>(selectedPlayerKey);
     const selectedPlayerID: StoredQueue = storedObj ? JSON.parse(storedObj) : null;
     return selectedPlayerID.queue_id;
-  } catch (error) {
+  } catch {
     showToast({
       title: "😲 No player selected!",
       message: "Please select an active player first.",
