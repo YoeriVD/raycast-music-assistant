@@ -2,7 +2,7 @@
 
 ## [All players] - {PR_MERGE_DATE}
 
-- Improved menubar control to display all active players
-- Drastically simplified code
+- Enhances the menu bar to list and control all active players.
+- Refactors player selection from static preferences to a dynamic, local-storage–backed queue ID
 
 ## [Initial Version] - {PR_MERGE_DATE}
