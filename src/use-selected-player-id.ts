@@ -3,7 +3,6 @@ import { showToast, launchCommand, LaunchType, LocalStorage } from "@raycast/api
 export const selectedPlayerKey = "queue_id";
 export async function getSelectedQueueID() {
   const selectedPlayerID = await LocalStorage.getItem<string>(selectedPlayerKey);
-  console.log(selectedPlayerID);
   if (!selectedPlayerID) {
     showToast({
       title: "No player selected!",
