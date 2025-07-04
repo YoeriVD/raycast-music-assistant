@@ -11,8 +11,8 @@ export default class MusicAssistantClient {
   async getActiveQueues() {
     return await executeApiCommand(async (api) => {
       const queues = await api.getPlayerQueues();
-      const activeQeueues = queues.filter((q) => q.active && q.current_item);
-      return activeQeueues;
+      const activeQueues = queues.filter((q) => q.active && q.current_item);
+      return activeQueues;
     });
   }
 }
