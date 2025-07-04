@@ -2,14 +2,10 @@ import executeApiCommand from "./api-command";
 
 export default class MusicAssistantClient {
   async next(playerId: string) {
-    await executeApiCommand(async (api) => {
-      await api.playerCommandNext(playerId);
-    });
+    await executeApiCommand(async (api) => await api.playerCommandNext(playerId));
   }
   async togglePlayPause(playerId: string) {
-    await executeApiCommand(async (api) => {
-      await api.playerCommandPlayPause(playerId);
-    });
+    await executeApiCommand(async (api) => await api.playerCommandPlayPause(playerId));
   }
 
   async getActiveQueues() {

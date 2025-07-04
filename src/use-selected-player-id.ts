@@ -1,9 +1,9 @@
-import { showToast, launchCommand, LaunchType } from "@raycast/api";
-import { useLocalStorage } from "@raycast/utils";
+import { showToast, launchCommand, LaunchType, LocalStorage } from "@raycast/api";
 
 export const selectedPlayerKey = "queue_id";
-export function useSelectedPlayerID() {
-  const { value: selectedPlayerID } = useLocalStorage(selectedPlayerKey, "");
+export async function getSelectedQueueID() {
+  const selectedPlayerID = await LocalStorage.getItem<string>(selectedPlayerKey);
+  console.log(selectedPlayerID);
   if (!selectedPlayerID) {
     showToast({
       title: "No player selected!",
