@@ -3,7 +3,7 @@ import MusicAssistantClient from "./music-assistant-client";
 import { getSelectedQueueID } from "./use-selected-player-id";
 
 export default async function main() {
-  const selectedPlayerID = getSelectedQueueID();
+  const selectedPlayerID = await getSelectedQueueID();
   if (!selectedPlayerID) return;
   try {
     await new MusicAssistantClient().togglePlayPause(selectedPlayerID);
