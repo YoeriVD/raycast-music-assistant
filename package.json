@@ -29,6 +29,14 @@
       "subtitle": "Toggle play/pause",
       "description": "Plays or pauses song on the currently selected menu bar player.",
       "mode": "no-view"
+    },
+    {
+      "name": "set-active-player",
+      "title": "Set Active Player",
+      "description": "Configures which player to show in the menu bar and to execute other commands on",
+      "mode": "view",
+      "subtitle": "Configure the player to run commands on",
+      "icon": "logo.png"
     }
   ],
   "preferences": [

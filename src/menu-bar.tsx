@@ -3,7 +3,7 @@ import { useCachedPromise, useLocalStorage } from "@raycast/utils";
 import { PlayerQueue, PlayerState } from "./interfaces";
 import MusicAssistantClient from "./music-assistant-client";
 import { useEffect, useState } from "react";
-import { selectedPlayerKey } from "./use-selected-player-id";
+import { selectedPlayerKey, StoredQueue } from "./use-selected-player-id";
 
 export default function Command() {
   const client = new MusicAssistantClient();
@@ -16,17 +16,13 @@ export default function Command() {
     initialData: [],
   });
 
-  const { value: storedQueueId, setValue: storeQueueId } = useLocalStorage<{ queue_id: string }>(selectedPlayerKey);
+  const { value: storedQueueId, setValue: storeQueueId } = useLocalStorage<StoredQueue>(selectedPlayerKey);
 
   const [title, setTitle] = useState<string>();
 
   useEffect(() => {
     if (queues.length === 0) return;
-    let queue = storedQueueId?.queue_id ? queues.find((q) => q.queue_id === storedQueueId.queue_id) : undefined;
-    if (!queue) {
-      queue = queues[0]!;
-      storeQueueId({ queue_id: queue.queue_id });
-    }
+    let queue = storedQueueId?.queue_id ? queues.find((q) => q.queue_id === storedQueueId.queue_id) : queues[0];
     const current_item = queue?.current_item;
     if (current_item?.name && current_item.name !== title) setTitle(current_item.name);
   }, [storedQueueId]);
