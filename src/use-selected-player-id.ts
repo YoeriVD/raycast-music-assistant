@@ -4,7 +4,6 @@ export const selectedPlayerKey = "queue_id";
 export async function getSelectedQueueID() {
   const storedObj = await LocalStorage.getItem<string>(selectedPlayerKey);
   const selectedPlayerID: { queue_id: string } = storedObj ? JSON.parse(storedObj) : null;
-  console.log(selectedPlayerID);
   if (!selectedPlayerID) {
     showToast({
       title: "No player selected!",
